@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'quiz',
 ]
 
 MIDDLEWARE = [
@@ -75,10 +76,15 @@ WSGI_APPLICATION = 'OnlineTestApp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'quizapp_db',
+        'USER': 'postgres',
+        'PASSWORD': 'Itvedant@2020',
+        'HOST': 'localhost',
     }
 }
+
+# DATABASES = {'default': dj_database_url.config(default='postgres://postgres:Itvedant@2020@localhost/quizapp_db')}
 
 
 # Password validation
