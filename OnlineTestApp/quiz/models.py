@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.template.defaultfilters import slugify
+
+
 
 class Quiz(models.Model):
 	name = models.CharField(max_length=100)
@@ -56,3 +61,8 @@ class UserAnswer(models.Model):
 	def __str__(self):
 		return self.question.label
 		
+
+# modified the Quiz name field into slug
+@receiver(pre_save, sender=Quiz)
+def slugify_name(sender, instance,*args, **kwargs):
+	instance.slug =slugify(instance.name)
