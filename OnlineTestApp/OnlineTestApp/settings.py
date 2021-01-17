@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Set Default User Model from accounts app
+AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
@@ -39,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nested_admin',
     'rest_framework',
+    'knox',
     'quiz',
+    'accounts',
     
 ]
 
@@ -52,6 +56,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Rest Framework Authentication
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'UNICODE_JSON': False
+}
 
 ROOT_URLCONF = 'OnlineTestApp.urls'
 

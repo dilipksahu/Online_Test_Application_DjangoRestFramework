@@ -34,7 +34,7 @@ class UsersAnswerSerializer(serializers.ModelSerializer):
 
 
 class QuizTakerSerializer(serializers.ModelSerializer):
-	users_answer_set = UsersAnswerSerializer(many=True)
+	useranswer_set = UsersAnswerSerializer(many=True)
 
 	class Meta:
 		model = QuizTaker
@@ -47,13 +47,14 @@ class QuizDetailSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Quiz
-		fields = '__all__'
+		fields = "__all__"
 
 	def get_quiztakers_set(self, obj):
 		try:
-			quiz_taker = QuizTaker.objects.get(user=self.contaxt['request'].user, quiz=obj)
+			quiz_taker = QuizTaker.objects.get(user=self.context['request'].user, quiz=obj)
 			serializer = QuizTakerSerializer(quiz_taker)
 			return serializer.data
 		except QuizTaker.DoesNotExist:
 			return None
+
 

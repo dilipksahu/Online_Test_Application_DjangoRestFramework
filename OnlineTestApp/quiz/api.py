@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from rest_framework.response import Response
 from django.db.models import Q
-from .models import Quiz, QuizTaker
-from .serializers import QuizListSerializer, QuizDetailSerializer
+from quiz.models import Quiz, QuizTaker, Question, Answer, UserAnswer
+from quiz.serializers import QuizListSerializer, QuizDetailSerializer
 
 
 class QuizListAPI(generics.ListAPIView):
@@ -26,16 +26,18 @@ class QuizListAPI(generics.ListAPIView):
 
 class QuizDetailAPI(generics.RetrieveAPIView):
 	serializer_class = QuizDetailSerializer
-	# permission_classes = []
+	# permission_classes = [
+	# 	permissions.IsAuthenticated
+	# ]
 
-	def get_queryset(self, *args,**kwargs):
+	def get(self, *args, **kwargs):
 		slug = self.kwargs["slug"]
 		quiz = get_object_or_404(Quiz, slug=slug)
 		last_question = None
-		obj, created = QuizTaker.objects.get_or_create(user=self.request.user,quiz = quiz)
+		obj, created = QuizTaker.objects.get_or_create(user=self.request.user, quiz=quiz)
 		if created:
 			for question in Question.objects.filter(quiz=quiz):
-				UserAnswer.objects.create(quiz_taker=obj, question=question) 
+				UserAnswer.objects.create(quiz_taker=obj, question=question)
 		else:
 			last_question = UserAnswer.objects.filter(quiz_taker=obj, answer__isnull=False)
 			if last_question.count() > 0:
